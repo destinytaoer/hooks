@@ -4,6 +4,9 @@
   "description": "custom react hooks",
   "main": "dist/index.js",
   "types": "lib/typings/index.d.ts",
+  "devDependencies": {
+    "prettier": "^2.8.3"
+  },
   "repository": "git@github.com:destinytaoer/hooks.git",
   "author": "destiny <1848765519@qq.com>",
   "license": "MIT"

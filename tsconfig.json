@@ -4,7 +4,7 @@
     "node_modules"
   ],
   "compilerOptions": {
-    "outDir": "dist/typings",
+    "outDir": "dist",
     "declaration": true,
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 

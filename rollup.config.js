@@ -7,10 +7,14 @@ import terser from '@rollup/plugin-terser';
 const Index = 'src/index.ts'
 const HooksDir = 'src/hooks'
 
-const Hooks = fs.readdirSync(path.resolve(HooksDir)).map((fileName) => `${HooksDir}/${fileName}`)
-
 // 入口文件
-const input = [Index, ...Hooks];
+const input = {
+  index: Index,
+}
+
+fs.readdirSync(path.resolve(HooksDir)).map((fileName) => {
+  input[`hooks/${fileName}/index`] = `${HooksDir}/${fileName}/index.ts`;
+});
 
 // 打包文件
 const output = {

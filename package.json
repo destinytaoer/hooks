@@ -1,0 +1,10 @@
+{
+  "name": "hooks",
+  "version": "1.0.0",
+  "description": "custom react hooks",
+  "main": "dist/index.js",
+  "types": "lib/typings/index.d.ts",
+  "repository": "git@github.com:destinytaoer/hooks.git",
+  "author": "destiny <1848765519@qq.com>",
+  "license": "MIT"
+}

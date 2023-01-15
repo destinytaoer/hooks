@@ -15,12 +15,11 @@ describe('useMount', () => {
     expect(fn).toBeCalledTimes(2);
   });
 
-  // it('should output error when fn is not a function', () => {
-  //   const errSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-  //   renderHook(() => useMount(1 as any));
-  //   expect(errSpy).toBeCalledWith(
-  //     'useMount: parameter `fn` expected to be a function, but got "number".',
-  //   );
-  //   errSpy.mockRestore();
-  // });
+  it('test unmount', async () => {
+    const fn = jest.fn()
+    const hook = renderHook(() => useMount(() => fn));
+    expect(fn).toBeCalledTimes(0)
+    hook.unmount();
+    expect(fn).toBeCalledTimes(1)
+  })
 });

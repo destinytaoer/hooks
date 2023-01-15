@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "jest --watch",
     "dev": "lerna run dev"
   },
   "devDependencies": {

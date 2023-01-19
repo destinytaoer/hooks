@@ -6,13 +6,17 @@
 
 ### State
 
-- [useLatestRef](./src/hooks/use-latest-ref/index.ts)
+- [useObjectState](src/hooks/use-object-state/index.ts)
 
 ### lifecycle
+
+不推荐使用, 建议直接使用 useEffect
 
 - [useMount](./src/hooks/use-mount/index.ts)
 - [useUpdate](./src/hooks/use-update/index.ts)
 - [useUnmount](./src/hooks/use-unmount/index.ts)
 - [useIsMountedRef](./src/hooks/use-is-mounted-ref/index.ts)
 
+### Advanced
 
+- [useLatestRef](./src/hooks/use-latest-ref/index.ts)

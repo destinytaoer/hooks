@@ -4,7 +4,8 @@ export type SetState<T extends Record<string, any>> = <K extends keyof T>(
     state: Pick<T, K> | null | ((prevState: Readonly<T>) => Pick<T, K> | T | null),
 ) => void;
 
-export const useSetState = <T extends Record<string, any>>(
+// 方便管理 object 类型 state
+export const useObjectState = <T extends Record<string, any>>(
   initialState: T | (() => T)
 ): [T, SetState<T>] => {
   // initialState 支持 惰性初始化, 可以是 obj ,也可以是初始化函数

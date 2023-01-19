@@ -7,6 +7,7 @@
 ### State
 
 - [useObjectState](src/hooks/use-object-state/index.ts)
+- [useLatest](src/hooks/use-latest/index.ts)
 
 ### lifecycle
 
@@ -19,4 +20,3 @@
 
 ### Advanced
 
-- [useLatestRef](./src/hooks/use-latest-ref/index.ts)

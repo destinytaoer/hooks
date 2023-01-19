@@ -18,5 +18,9 @@
 - [useUnmount](./src/hooks/use-unmount/index.ts)
 - [useIsMountedRef](./src/hooks/use-is-mounted-ref/index.ts)
 
+### Effect
+
+- [useTimeout](./src/hooks/use-timeout/index.ts)
+
 ### Advanced
 

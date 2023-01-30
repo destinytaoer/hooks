@@ -8,7 +8,7 @@ export default {
     '^.+\\.ts?$': 'ts-jest',
   },
   collectCoverageFrom: [
-    '<rootDir>/**/src/**/*.{js,jsx,ts,tsx}',
+    '<rootDir>/**/hooks/src/**/*.{js,jsx,ts,tsx}',
     '!<rootDir>/**/src/index.ts',
     '!**/dist/**'
   ],

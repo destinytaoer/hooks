@@ -1,7 +1,7 @@
 import type { BasicTarget } from '../utils/domTarget';
 import { getTargetElement } from '../utils/domTarget';
 import { useLatestRef } from '../use-latest-ref';
-import { useEffect } from 'react';
+import { useEffectWithTarget } from '../utils/useEffectWithTarget';
 
 type noop = (...p: any) => void;
 
@@ -40,25 +40,29 @@ function useEventListener(eventName: string, handler: noop, options: Options): v
 function useEventListener(eventName: string, handler: noop, options: Options = {}) {
   const handlerRef = useLatestRef(handler);
 
-  useEffect(() => {
-    const targetElement = getTargetElement(options.target, window);
+  useEffectWithTarget(
+    () => {
+      const targetElement = getTargetElement(options.target, window);
 
-    if (!targetElement?.addEventListener) return;
+      if (!targetElement?.addEventListener) return;
 
-    const eventListener = (event: Event) => {
-      handlerRef.current(event);
-    };
+      const eventListener = (event: Event) => {
+        handlerRef.current(event);
+      };
 
-    targetElement.addEventListener(eventName, eventListener, {
-      capture: options.capture,
-      once: options.once,
-      passive: options.passive,
-    });
+      targetElement.addEventListener(eventName, eventListener, {
+        capture: options.capture,
+        once: options.once,
+        passive: options.passive,
+      });
 
-    return () => {
-      targetElement.removeEventListener(eventName, eventListener, { capture: options.capture });
-    };
-  }, [eventName, options.capture, options.once, options.passive]);
+      return () => {
+        targetElement.removeEventListener(eventName, eventListener, { capture: options.capture });
+      };
+    },
+    [eventName, options.capture, options.once, options.passive],
+    options.target
+  );
 }
 
 export { useEventListener };

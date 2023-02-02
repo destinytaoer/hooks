@@ -1,4 +1,5 @@
 import { DependencyList, useRef } from 'react';
+import depsAreSame from '../utils/depsAreSame';
 
 // 用于创建开销较大的对象, 避免每次渲染都重新创建
 // export const useCreation = <T>(factory: () => T) => {
@@ -8,14 +9,6 @@ import { DependencyList, useRef } from 'react';
 //   }
 //   return ref.current;
 // }
-
-export default function depsAreSame(oldDeps: DependencyList, deps: DependencyList): boolean {
-  if (oldDeps === deps) return true;
-  for (let i = 0; i < oldDeps.length; i++) {
-    if (!Object.is(oldDeps[i], deps[i])) return false;
-  }
-  return true;
-}
 
 // ahooks 进阶版, 增加依赖
 // useMemo 不能保证被 memo 的值一定不会被重计算

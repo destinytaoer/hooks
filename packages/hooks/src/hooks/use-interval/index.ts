@@ -1,8 +1,8 @@
 import {useCallback, useEffect, useRef} from 'react';
-import { useLatest } from '../use-latest';
+import { useLatestRef } from '../use-latest-ref';
 
 export const useInterval = (fn: () => void, delay: number | undefined) => {
-  const getLatestFn = useLatest(fn);
+  const fnRef = useLatestRef(fn);
   const timer = useRef<NodeJS.Timer | null>(null);
   const clear = useCallback(() => {
     if (timer.current) {
@@ -16,8 +16,7 @@ export const useInterval = (fn: () => void, delay: number | undefined) => {
       return;
     }
     timer.current = setInterval(() => {
-      const fn = getLatestFn();
-      fn();
+      fnRef.current();
     }, delay);
 
     return clear;

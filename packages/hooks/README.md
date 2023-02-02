@@ -29,4 +29,4 @@
 
 ### Advanced
 
-- [useLatest](src/hooks/use-latest/index.ts)
+- [useLatestRef](src/hooks/use-latest-ref/index.ts)

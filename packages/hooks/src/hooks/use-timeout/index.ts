@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useLatest } from '../use-latest';
+import { useLatestRef } from '../use-latest-ref';
 
 export const useTimeout = (fn: () => void, delay: number | undefined) => {
-  const getLatestFn = useLatest(fn);
+  const fnRef = useLatestRef(fn);
   // 如果不需要手动 clear 方法, timer 可以不提取出来
   const timer = useRef<NodeJS.Timer | null>(null);
 
@@ -18,8 +18,7 @@ export const useTimeout = (fn: () => void, delay: number | undefined) => {
       return;
     }
     timer.current = setTimeout(() => {
-      const fn = getLatestFn();
-      fn();
+      fnRef.current();
     }, delay);
 
     return clear;

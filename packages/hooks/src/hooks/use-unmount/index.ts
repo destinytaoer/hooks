@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
-import { useLatest } from '../use-latest';
+import { useLatestRef } from '../use-latest-ref';
 
 export const useUnmount = (fn: () => void) => {
   if (typeof fn !== 'function') {
     console.error('useUnmount: parameter fn is not a function');
   }
-  const getLatestValue = useLatest(fn);
+  const fnRef = useLatestRef(fn);
 
   useEffect(
     () => () => {
-      getLatestValue()();
+      fnRef.current();
     },
     []
   );

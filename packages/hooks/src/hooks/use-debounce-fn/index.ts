@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { debounce } from 'lodash';
 import { useUnmount } from '../use-unmount';
-import { useLatest } from '../use-latest';
+import { useLatestRef } from '../use-latest-ref';
 
 type Fn = (...args: any[]) => any;
 
@@ -18,13 +18,13 @@ export const useDebounceFn = <T extends Fn>(fn: T, wait = 1000, options?: Deboun
     console.error('useDebounceFn: parameter fn is not a function');
   }
 
-  const getLatestFn = useLatest(fn);
+  const fnRef = useLatestRef(fn);
 
   const debouncedFn = useMemo(
     () =>
       debounce(
         (...args: Parameters<T>): ReturnType<T> => {
-          return getLatestFn()(...args);
+          return fnRef.current(...args);
         },
         wait,
         options

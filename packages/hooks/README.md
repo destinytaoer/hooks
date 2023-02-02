@@ -7,7 +7,8 @@
 ### State
 
 - [useObjectState](src/hooks/use-object-state/index.ts)
-- [useLatest](src/hooks/use-latest/index.ts)
+- [useDebounce](./src/hooks/use-debounce/index.ts)
+- [useThrottle](./src/hooks/use-throttle/index.ts)
 
 ### lifecycle
 
@@ -21,6 +22,11 @@
 ### Effect
 
 - [useTimeout](./src/hooks/use-timeout/index.ts)
+- [useInterval](./src/hooks/use-interval/index.ts)
+- [useDebounceFn](./src/hooks/use-debounce-fn/index.ts)
+- [useThrottleFn](./src/hooks/use-throttle-fn/index.ts)
+- [useLockFn](./src/hooks/use-lock-fn/index.ts)
 
 ### Advanced
 
+- [useLatest](src/hooks/use-latest/index.ts)

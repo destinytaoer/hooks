@@ -12,3 +12,5 @@ export { useThrottleFn } from './hooks/use-throttle-fn';
 export { useDebounce } from './hooks/use-debounce';
 export { useThrottle } from './hooks/use-throttle';
 export { useLockFn } from './hooks/use-lock-fn';
+export { useEventListener } from './hooks/use-event-listener';
+export { useClickAway } from './hooks/use-click-away'

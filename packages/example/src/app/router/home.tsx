@@ -9,6 +9,9 @@ const HomePage: FC = () => {
         <li>
           <Link to="/use-mount">use-mount</Link>
         </li>
+        <li>
+          <Link to="/use-fullscreen">use-fullscreen</Link>
+        </li>
       </ul>
       <Outlet />
     </div>

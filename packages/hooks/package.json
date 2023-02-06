@@ -10,7 +10,8 @@
     "build": "rollup -c"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "screenfull": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",

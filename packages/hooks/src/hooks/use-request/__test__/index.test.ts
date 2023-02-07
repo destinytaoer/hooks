@@ -216,4 +216,35 @@ describe('useRequest', () => {
     });
     expect(hook.result.current.data).toBe('mutate');
   });
+
+  it('should fixed race condition', async () => {
+    const successCallback = jest.fn();
+    const errorCallback = jest.fn();
+    const beforeCallback = jest.fn();
+    const finallyCallback = jest.fn();
+    const hook = setUp(request, {
+      manual: true,
+      onSuccess: successCallback,
+      onError: errorCallback,
+      onBefore: beforeCallback,
+      onFinally: finallyCallback,
+    });
+
+    act(() => {
+      hook.result.current.run(1);
+    });
+    expect(hook.result.current.loading).toBe(true);
+    expect(beforeCallback).toBeCalledTimes(1);
+
+    act(() => {
+      hook.result.current.run(0);
+      jest.runAllTimers();
+    });
+    await waitFor(() => expect(hook.result.current.loading).toBe(false));
+    expect(hook.result.current.data).toBe(undefined);
+    expect(hook.result.current.error).toEqual(new Error('fail'));
+    expect(errorCallback).toBeCalledTimes(1);
+    expect(successCallback).toBeCalledTimes(0);
+    expect(finallyCallback).toBeCalledTimes(1);
+  });
 });

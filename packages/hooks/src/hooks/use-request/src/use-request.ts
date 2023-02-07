@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Service, Options, FetchState } from './typings';
 import useMemoizedFn from '../../use-memoized-fn';
 import { useMount } from '../../use-mount';
@@ -16,11 +16,16 @@ export const useRequest = <TData, TParams extends any[]>(
     onFinally,
     onSuccess,
   } = options ?? {};
+
+  const countRef = useRef(0);
   const [fetchState, setFetchState] = useState<FetchState<TData, TParams>>({
     loading: false,
   });
 
-  const runAsync = async (...params: TParams) => {
+  const runAsync = async (...params: TParams): Promise<TData> => {
+    countRef.current++;
+    const currentCount = countRef.current;
+
     setFetchState((oldState) => ({
       ...oldState,
       params,
@@ -30,6 +35,12 @@ export const useRequest = <TData, TParams extends any[]>(
 
     try {
       const data = await service(...params);
+
+      // 如果当前请求已经取消或者已经发起新的请求, 那么当前请求结果将不做处理
+      if (currentCount !== countRef.current) {
+        return new Promise(() => {});
+      }
+
       setFetchState((oldState) => ({
         ...oldState,
         loading: false,
@@ -41,6 +52,11 @@ export const useRequest = <TData, TParams extends any[]>(
 
       return data;
     } catch (e: any) {
+      // 如果当前请求已经取消或者已经发起新的请求, 那么当前请求结果将不做处理
+      if (currentCount !== countRef.current) {
+        return new Promise(() => {});
+      }
+
       setFetchState((oldState) => ({
         ...oldState,
         loading: false,

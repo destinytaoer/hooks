@@ -1,7 +1,8 @@
 import { DependencyList, EffectCallback, useEffect, useRef } from 'react';
+import { isFunction } from '../utils';
 
 export const useUpdate = (fn: EffectCallback, deps?: DependencyList) => {
-  if (typeof fn !== 'function') {
+  if (!isFunction(fn)) {
     console.error('useUpdate: parameter fn is not a function');
   }
 

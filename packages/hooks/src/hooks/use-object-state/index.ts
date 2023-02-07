@@ -1,7 +1,8 @@
-import {useCallback, useState} from 'react';
+import { useCallback, useState } from 'react';
+import { isFunction } from '../utils';
 
 export type SetState<T extends Record<string, any>> = <K extends keyof T>(
-    state: Pick<T, K> | null | ((prevState: Readonly<T>) => Pick<T, K> | T | null),
+  state: Pick<T, K> | null | ((prevState: Readonly<T>) => Pick<T, K> | T | null)
 ) => void;
 
 // 方便管理 object 类型 state
@@ -14,7 +15,7 @@ export const useObjectState = <T extends Record<string, any>>(
   // setMergeState 支持传入修改的值或由旧值构建新值的函数
   const setMergeState: SetState<T> = useCallback((patch) => {
     setState((oldState) => {
-      const newState = typeof patch === 'function' ? patch(oldState) : patch;
+      const newState = isFunction(patch) ? patch(oldState) : patch;
       return {
         ...oldState,
         ...newState,
@@ -24,4 +25,3 @@ export const useObjectState = <T extends Record<string, any>>(
 
   return [state, setMergeState];
 };
-;

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { throttle } from 'lodash';
 import { useUnmount } from '../use-unmount';
 import { useLatestRef } from '../use-latest-ref';
+import { isFunction } from '../utils';
 
 type Fn = (...args: any[]) => any;
 
@@ -11,7 +12,7 @@ export interface ThrottleOptions {
 }
 
 export const useThrottleFn = <T extends Fn>(fn: T, wait = 1000, options?: ThrottleOptions) => {
-  if (typeof fn !== 'function') {
+  if (!isFunction(fn)) {
     console.error('useDebounceFn: parameter fn is not a function');
   }
 

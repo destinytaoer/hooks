@@ -247,4 +247,27 @@ describe('useRequest', () => {
     expect(successCallback).toBeCalledTimes(0);
     expect(finallyCallback).toBeCalledTimes(1);
   });
+
+  it('should cancel work', async () => {
+    const hook = setUp(request, {
+      manual: true,
+    });
+
+    act(() => {
+      hook.result.current.run(1);
+    });
+    expect(hook.result.current.loading).toBe(true);
+
+    act(() => {
+      hook.result.current.cancel();
+    });
+    expect(hook.result.current.loading).toBe(false);
+
+    act(() => {
+      jest.advanceTimersByTime(2000);
+    });
+    await waitFor(() => expect(hook.result.current.loading).toBe(false));
+    expect(hook.result.current.data).toBe(undefined);
+    expect(hook.result.current.error).toEqual(undefined);
+  });
 });

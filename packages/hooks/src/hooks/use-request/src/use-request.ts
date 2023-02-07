@@ -96,6 +96,15 @@ export const useRequest = <TData, TParams extends any[]>(
     });
   };
 
+  const cancel = () => {
+    countRef.current++;
+
+    setFetchState((oldState) => ({
+      ...oldState,
+      loading: false,
+    }));
+  };
+
   useMount(() => {
     if (!manual) {
       run(...(defaultParams as TParams));
@@ -109,5 +118,6 @@ export const useRequest = <TData, TParams extends any[]>(
     refresh: useMemoizedFn(refresh),
     refreshAsync: useMemoizedFn(refreshAsync),
     mutate: useMemoizedFn(mutate),
+    cancel: useMemoizedFn(cancel),
   };
 };

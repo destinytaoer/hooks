@@ -204,4 +204,16 @@ describe('useRequest', () => {
     await waitFor(() => expect(hook.result.current.loading).toEqual(false));
     expect(hook.result.current.error).toEqual(new Error('fail'));
   });
+
+  it('mutate should work', () => {
+    const hook = setUp(request, {
+      manual: true,
+    });
+    expect(hook.result.current.data).toBe(undefined);
+
+    act(() => {
+      hook.result.current.mutate('mutate');
+    });
+    expect(hook.result.current.data).toBe('mutate');
+  });
 });

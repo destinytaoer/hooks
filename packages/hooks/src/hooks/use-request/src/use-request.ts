@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Service, Options, FetchState } from './typings';
 import useMemoizedFn from '../../use-memoized-fn';
 import { useMount } from '../../use-mount';
+import { isFunction } from '../../utils';
 
 export const useRequest = <TData, TParams extends any[]>(
   service: Service<TData, TParams>,
@@ -69,6 +70,16 @@ export const useRequest = <TData, TParams extends any[]>(
     return runAsync(...((fetchState.params || []) as TParams));
   };
 
+  const mutate = (data?: TData | ((oldData?: TData) => TData | undefined)) => {
+    setFetchState((oldState) => {
+      const targetData = isFunction(data) ? data(oldState.data) : data;
+      return {
+        ...oldState,
+        data: targetData,
+      };
+    });
+  };
+
   useMount(() => {
     if (!manual) {
       run(...(defaultParams as TParams));
@@ -81,5 +92,6 @@ export const useRequest = <TData, TParams extends any[]>(
     runAsync: useMemoizedFn(runAsync),
     refresh: useMemoizedFn(refresh),
     refreshAsync: useMemoizedFn(refreshAsync),
+    mutate: useMemoizedFn(mutate),
   };
 };

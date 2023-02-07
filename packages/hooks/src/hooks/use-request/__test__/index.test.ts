@@ -1,11 +1,13 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { useRequest } from '../index';
 import { request } from '../../utils/testHelpers';
+import { Service } from '../src/typings';
 
 describe('useRequest', () => {
   jest.useFakeTimers();
 
-  const setUp = (service, options) => renderHook((o) => useRequest(service, o || options));
+  const setUp = <TData, TParams extends any[]>(service: Service<TData, TParams>, options) =>
+    renderHook((o) => useRequest(service, o || options));
   it('should auto run by default', async () => {
     const successCallback = jest.fn();
     const errorCallback = jest.fn();
@@ -24,7 +26,7 @@ describe('useRequest', () => {
     expect(beforeCallback).toBeCalledTimes(1);
 
     act(() => {
-      jest.runOnlyPendingTimers();
+      jest.runAllTimers();
     });
     // 执行成功
     await waitFor(() => expect(hook.result.current.loading).toEqual(false));
@@ -70,7 +72,7 @@ describe('useRequest', () => {
     expect(beforeCallback).toBeCalledTimes(1);
 
     act(() => {
-      jest.runOnlyPendingTimers();
+      jest.runAllTimers();
     });
     await waitFor(() => expect(hook.result.current.loading).toBe(false));
     expect(hook.result.current.data).toBe('success');
@@ -79,7 +81,7 @@ describe('useRequest', () => {
     expect(successCallback).toBeCalledTimes(1);
   });
 
-  it("data should not change after fail", async () => {
+  it('data should not change after fail', async () => {
     const hook = setUp(request, {
       manual: true,
     });
@@ -88,7 +90,7 @@ describe('useRequest', () => {
     //manual run success
     act(() => {
       hook.result.current.run(1);
-      jest.runOnlyPendingTimers();
+      jest.runAllTimers();
     });
     await waitFor(() => expect(hook.result.current.loading).toBe(false));
     expect(hook.result.current.data).toBe('success');
@@ -96,11 +98,57 @@ describe('useRequest', () => {
     // manual run fail
     act(() => {
       hook.result.current.run(0);
-      jest.runOnlyPendingTimers();
+      jest.runAllTimers();
     });
     await waitFor(() => expect(hook.result.current.loading).toBe(false));
     expect(hook.result.current.error).toEqual(new Error('fail'));
     // 失败后, data 不变
     expect(hook.result.current.data).toBe('success');
-  })
+  });
+
+  it('runAsync should work', async () => {
+    let success = '',
+      error = '';
+
+    const hook = setUp(request, {
+      manual: true,
+    });
+    act(() => {
+      hook.result.current
+        .runAsync(0)
+        .then((res) => {
+          success = res;
+        })
+        .catch((err) => {
+          error = err;
+        });
+    });
+
+    act(() => {
+      jest.runAllTimers();
+    });
+    await waitFor(() => expect(hook.result.current.loading).toBe(false));
+    expect(error).toEqual(new Error('fail'));
+    expect(success).toBe('');
+
+    success = '';
+    error = '';
+    act(() => {
+      hook.result.current
+        .runAsync(1)
+        .then((res) => {
+          success = res;
+        })
+        .catch((err) => {
+          error = err;
+        });
+    });
+
+    act(() => {
+      jest.runAllTimers();
+    });
+    await waitFor(() => expect(hook.result.current.loading).toBe(false));
+    expect(success).toBe('success')
+    expect(error).toEqual('');
+  });
 });

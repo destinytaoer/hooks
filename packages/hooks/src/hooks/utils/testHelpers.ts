@@ -1,4 +1,4 @@
-export function request(req: number) {
+export function request(req: number): Promise<string> {
   return new Promise((resolve, reject) =>
     setTimeout(() => {
       if (req === 0) {

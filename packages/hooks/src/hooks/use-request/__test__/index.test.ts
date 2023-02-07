@@ -5,6 +5,7 @@ import { Service } from '../src/typings';
 
 describe('useRequest', () => {
   jest.useFakeTimers();
+  jest.spyOn(console, 'error').mockImplementation(() => {});
 
   const setUp = <TData, TParams extends any[]>(service: Service<TData, TParams>, options) =>
     renderHook((o) => useRequest(service, o || options));

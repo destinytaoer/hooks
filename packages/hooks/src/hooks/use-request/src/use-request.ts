@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Service, Options, FetchState } from './typings';
 import useMemoizedFn from '../../use-memoized-fn';
+import { useMount } from '../../use-mount';
 
 export const useRequest = <TData, TParams extends any[]>(
   service: Service<TData, TParams>,
@@ -37,7 +38,7 @@ export const useRequest = <TData, TParams extends any[]>(
       onSuccess?.(data, params);
       onFinally?.(params, data);
 
-      return data
+      return data;
     } catch (e: any) {
       setFetchState((oldState) => ({
         ...oldState,
@@ -48,27 +49,37 @@ export const useRequest = <TData, TParams extends any[]>(
       onFinally?.(params, undefined, e);
 
       // 外部自行处理错误
-      throw e
+      throw e;
     }
   };
 
   const run = (...params: TParams) => {
     runAsync(...params).catch((e) => {
       if (!onError) {
-        console.error(e)
+        console.error(e);
       }
     });
   };
 
-  useEffect(() => {
+  const refresh = () => {
+    run(...((fetchState.params || []) as TParams));
+  };
+
+  const refreshAsync = () => {
+    return runAsync(...((fetchState.params || []) as TParams));
+  };
+
+  useMount(() => {
     if (!manual) {
       run(...(defaultParams as TParams));
     }
-  }, [manual]);
+  });
 
   return {
     ...fetchState,
     run: useMemoizedFn(run),
     runAsync: useMemoizedFn(runAsync),
+    refresh: useMemoizedFn(refresh),
+    refreshAsync: useMemoizedFn(refreshAsync),
   };
 };

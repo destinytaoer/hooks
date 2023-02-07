@@ -148,7 +148,59 @@ describe('useRequest', () => {
       jest.runAllTimers();
     });
     await waitFor(() => expect(hook.result.current.loading).toBe(false));
-    expect(success).toBe('success')
+    expect(success).toBe('success');
     expect(error).toEqual('');
+  });
+
+  it('refresh should work', async () => {
+    const defaultParams = [1, 2, 3];
+    const hook = setUp(request, {
+      defaultParams,
+    });
+
+    act(() => {
+      jest.runAllTimers();
+    });
+    await waitFor(() => expect(hook.result.current.loading).toEqual(false));
+
+    act(() => {
+      hook.result.current.refresh();
+    });
+    expect(hook.result.current.loading).toBe(true);
+    expect(hook.result.current.params).toEqual(defaultParams);
+  });
+
+  it('refreshAsync should work', async () => {
+    let success = '',
+      error = '';
+    const defaultParams = [0];
+    const hook = setUp(request, {
+      defaultParams,
+    });
+
+    act(() => {
+      jest.runAllTimers();
+    });
+    await waitFor(() => expect(hook.result.current.loading).toEqual(false));
+    expect(hook.result.current.error).toEqual(new Error('fail'));
+
+    act(() => {
+      hook.result.current
+        .refreshAsync()
+        .then((res) => {
+          success = res;
+        })
+        .catch((err) => {
+          error = err;
+        });
+    });
+    expect(hook.result.current.loading).toBe(true);
+    expect(hook.result.current.params).toEqual(defaultParams);
+
+    act(() => {
+      jest.runAllTimers();
+    });
+    await waitFor(() => expect(hook.result.current.loading).toEqual(false));
+    expect(hook.result.current.error).toEqual(new Error('fail'));
   });
 });

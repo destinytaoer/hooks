@@ -16,5 +16,6 @@ export { useEventListener } from './hooks/use-event-listener';
 export { useClickAway } from './hooks/use-click-away';
 export { useDocumentTitle } from './hooks/use-document-title';
 export { useFullscreen } from './hooks/use-fullscreen';
+export { useMemoizedFn } from './hooks/use-memoized-fn';
 
 export { useRequest } from './hooks/use-request';

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import screenfull from 'screenfull';
 import { BasicTarget, getTargetElement } from '../utils/domTarget';
 import { useLatestRef } from '../use-latest-ref';
-import useMemoizedFn from '../use-memoized-fn';
+import { useMemoizedFn } from '../use-memoized-fn';
 import { useUnmount } from '../use-unmount';
 
 export interface Options {

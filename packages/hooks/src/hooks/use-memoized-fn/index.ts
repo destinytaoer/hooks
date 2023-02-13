@@ -8,7 +8,7 @@ type PickFunction<T extends noop> = (
   ...args: Parameters<T>
 ) => ReturnType<T>;
 
-function useMemoizedFn<T extends noop>(fn: T) {
+export function useMemoizedFn<T extends noop>(fn: T) {
   if (!isFunction(fn)) {
     console.error(`useMemoizedFn expected parameter is a function, got ${typeof fn}`);
   }
@@ -29,5 +29,3 @@ function useMemoizedFn<T extends noop>(fn: T) {
 
   return memoizedFn.current as T;
 }
-
-export default useMemoizedFn;

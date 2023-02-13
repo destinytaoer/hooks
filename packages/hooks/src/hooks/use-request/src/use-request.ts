@@ -5,11 +5,12 @@ import { useMount } from '../../use-mount';
 import { useUnmount } from '../../use-unmount';
 import { useMemoizedFn } from '../../use-memoized-fn';
 import Fetch from './Fetch';
-import { Service, Options, Result } from './typings';
+import { Service, Options, Result, Plugin } from './typings';
 
 export const useRequest = <TData, TParams extends any[]>(
   service: Service<TData, TParams>,
-  options: Options<TData, TParams> = {}
+  options: Options<TData, TParams> = {},
+  plugins: Plugin<TData, TParams>[] = []
 ) => {
   const { manual = false, ...rest } = options;
   const fetchOptions = { manual, ...rest };
@@ -23,6 +24,9 @@ export const useRequest = <TData, TParams extends any[]>(
   }, []);
   // 保持 options 是最新的
   fetchInstance.options = fetchOptions;
+
+  // run all plugins hooks
+  fetchInstance.pluginImpls = plugins.map((p) => p(fetchInstance, fetchOptions));
 
   useMount(() => {
     if (!manual) {

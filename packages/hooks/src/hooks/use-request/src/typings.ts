@@ -1,3 +1,5 @@
+import type Fetch from './Fetch';
+
 export type Service<TData, TParams extends any[]> = (...args: TParams) => Promise<TData>;
 
 export interface FetchState<TData, TParams extends any[]> {
@@ -16,4 +18,19 @@ export interface Options<TData, TParams extends any[]> {
   onFinally?: (params: TParams, data?: TData, e?: Error) => void;
 
   defaultParams?: TParams;
+}
+
+export type Subscribe = () => void;
+
+export interface Result<TData, TParams extends any[]> {
+  loading: boolean;
+  data?: TData;
+  error?: Error;
+  params: TParams | [];
+  cancel: Fetch<TData, TParams>['cancel'];
+  refresh: Fetch<TData, TParams>['refresh'];
+  refreshAsync: Fetch<TData, TParams>['refreshAsync'];
+  run: Fetch<TData, TParams>['run'];
+  runAsync: Fetch<TData, TParams>['runAsync'];
+  mutate: Fetch<TData, TParams>['mutate'];
 }

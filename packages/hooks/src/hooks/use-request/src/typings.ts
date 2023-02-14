@@ -1,5 +1,5 @@
 import type Fetch from './Fetch';
-import {DependencyList} from "react";
+import { DependencyList } from 'react';
 
 export type Service<TData, TParams extends any[]> = (...args: TParams) => Promise<TData>;
 
@@ -20,8 +20,15 @@ export interface Options<TData, TParams extends any[]> {
 
   defaultParams?: TParams;
 
+  // auto run
   refreshDeps?: DependencyList;
   ready?: boolean;
+
+  // debounce
+  debounceWait?: number;
+  debounceLeading?: boolean;
+  debounceTrailing?: boolean;
+  debounceMaxWait?: number;
 }
 
 export type Subscribe = () => void;
@@ -41,23 +48,23 @@ export interface Result<TData, TParams extends any[]> {
 
 export type Plugin<TData, TParams extends any[]> = {
   (fetchInstance: Fetch<TData, TParams>, options: Options<TData, TParams>): PluginReturn<
-      TData,
-      TParams
+    TData,
+    TParams
   >;
   onInit?: (options: Options<TData, TParams>) => Partial<FetchState<TData, TParams>>;
 };
 
 export interface PluginReturn<TData, TParams extends any[]> {
   onBefore?: (params: TParams) =>
-      | ({
-    stopNow?: boolean;
-    returnNow?: boolean;
-  } & Partial<FetchState<TData, TParams>>)
-      | void;
+    | ({
+        stopNow?: boolean;
+        returnNow?: boolean;
+      } & Partial<FetchState<TData, TParams>>)
+    | void;
 
   onRequest?: (
-      service: Service<TData, TParams>,
-      params: TParams,
+    service: Service<TData, TParams>,
+    params: TParams
   ) => {
     servicePromise?: Promise<TData>;
   };

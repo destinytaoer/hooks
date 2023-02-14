@@ -7,6 +7,7 @@ import { useMemoizedFn } from '../../use-memoized-fn';
 import Fetch from './Fetch';
 import { Service, Options, Result, Plugin } from './typings';
 import useAutoRunPlugin from './plugins/useAutoRunPlugin';
+import useDebouncePlugin from './plugins/useDebouncePlugin';
 
 export const useRequest = <TData, TParams extends any[]>(
   service: Service<TData, TParams>,
@@ -16,7 +17,7 @@ export const useRequest = <TData, TParams extends any[]>(
   const { manual = false, ...rest } = options;
   const fetchOptions = { manual, ...rest };
 
-  plugins = ([...plugins, useAutoRunPlugin] as Plugin<TData, TParams>[])
+  plugins = [...plugins, useAutoRunPlugin, useDebouncePlugin] as Plugin<TData, TParams>[];
 
   const serviceRef = useLatestRef(service);
 
@@ -24,15 +25,18 @@ export const useRequest = <TData, TParams extends any[]>(
 
   const fetchInstance = useCreation(() => {
     const initState = plugins.map((p) => p?.onInit?.(fetchOptions)).filter(Boolean);
-    return new Fetch<TData, TParams>(serviceRef, fetchOptions, forceUpdate, Object.assign({}, ...initState),);
+    return new Fetch<TData, TParams>(
+      serviceRef,
+      fetchOptions,
+      forceUpdate,
+      Object.assign({}, ...initState)
+    );
   }, []);
   // 保持 options 是最新的
   fetchInstance.options = fetchOptions;
 
   // run all plugins hooks
-  fetchInstance.pluginImpls = plugins.map(
-    (p) => p(fetchInstance, fetchOptions)
-  );
+  fetchInstance.pluginImpls = plugins.map((p) => p(fetchInstance, fetchOptions));
 
   useMount(() => {
     if (!manual) {

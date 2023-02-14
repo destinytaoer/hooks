@@ -29,6 +29,11 @@ export interface Options<TData, TParams extends any[]> {
   debounceLeading?: boolean;
   debounceTrailing?: boolean;
   debounceMaxWait?: number;
+
+  // throttle
+  throttleWait?: number;
+  throttleLeading?: boolean;
+  throttleTrailing?: boolean;
 }
 
 export type Subscribe = () => void;

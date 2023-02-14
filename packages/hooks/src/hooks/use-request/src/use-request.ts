@@ -6,6 +6,7 @@ import { useUnmount } from '../../use-unmount';
 import { useMemoizedFn } from '../../use-memoized-fn';
 import Fetch from './Fetch';
 import { Service, Options, Result, Plugin } from './typings';
+import useAutoRunPlugin from './plugins/useAutoRunPlugin';
 
 export const useRequest = <TData, TParams extends any[]>(
   service: Service<TData, TParams>,
@@ -15,7 +16,7 @@ export const useRequest = <TData, TParams extends any[]>(
   const { manual = false, ...rest } = options;
   const fetchOptions = { manual, ...rest };
 
-  plugins = ([...plugins] as Plugin<TData, TParams>[])
+  plugins = ([...plugins, useAutoRunPlugin] as Plugin<TData, TParams>[])
 
   const serviceRef = useLatestRef(service);
 

@@ -1,4 +1,5 @@
 import type Fetch from './Fetch';
+import {DependencyList} from "react";
 
 export type Service<TData, TParams extends any[]> = (...args: TParams) => Promise<TData>;
 
@@ -18,6 +19,9 @@ export interface Options<TData, TParams extends any[]> {
   onFinally?: (params: TParams, data?: TData, e?: Error) => void;
 
   defaultParams?: TParams;
+
+  refreshDeps?: DependencyList;
+  ready?: boolean;
 }
 
 export type Subscribe = () => void;

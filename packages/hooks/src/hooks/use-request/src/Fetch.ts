@@ -19,11 +19,13 @@ export default class Fetch<TData, TParams extends any[]> {
   constructor(
     public serviceRef: MutableRefObject<Service<TData, TParams>>,
     public options: Options<TData, TParams>,
-    public subscribe: Subscribe
+    public subscribe: Subscribe,
+    public initState: Partial<FetchState<TData, TParams>> = {}
   ) {
     this.state = {
       ...this.state,
       loading: !options.manual,
+      ...initState,
     };
   }
 
@@ -54,8 +56,6 @@ export default class Fetch<TData, TParams extends any[]> {
       returnNow = false,
       ...state
     } = this.runPluginHandler('onBefore', params);
-
-    console.log('onBefore', stopNow, returnNow);
 
     // stop request
     if (stopNow) {

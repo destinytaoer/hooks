@@ -15,18 +15,23 @@ export const useRequest = <TData, TParams extends any[]>(
   const { manual = false, ...rest } = options;
   const fetchOptions = { manual, ...rest };
 
+  plugins = ([...plugins] as Plugin<TData, TParams>[])
+
   const serviceRef = useLatestRef(service);
 
   const forceUpdate = useForceUpdate();
 
   const fetchInstance = useCreation(() => {
-    return new Fetch<TData, TParams>(serviceRef, fetchOptions, forceUpdate);
+    const initState = plugins.map((p) => p?.onInit?.(fetchOptions)).filter(Boolean);
+    return new Fetch<TData, TParams>(serviceRef, fetchOptions, forceUpdate, Object.assign({}, ...initState),);
   }, []);
   // 保持 options 是最新的
   fetchInstance.options = fetchOptions;
 
   // run all plugins hooks
-  fetchInstance.pluginImpls = plugins.map((p) => p(fetchInstance, fetchOptions));
+  fetchInstance.pluginImpls = plugins.map(
+    (p) => p(fetchInstance, fetchOptions)
+  );
 
   useMount(() => {
     if (!manual) {

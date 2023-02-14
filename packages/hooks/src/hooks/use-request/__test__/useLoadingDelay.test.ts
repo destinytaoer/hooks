@@ -1,0 +1,74 @@
+import { act, renderHook, waitFor } from '@testing-library/react';
+import { useRequest } from '../index';
+import { request } from '../../utils/testHelpers';
+
+describe('useLoadingDelayPlugin', () => {
+  jest.useFakeTimers();
+
+  const setUp = (service, options) => renderHook((o) => useRequest(service, o || options));
+
+  let hook;
+  it('useLoadingDelayPlugin should work', async () => {
+    act(() => {
+      hook = setUp(request, {
+        loadingDelay: 2000,
+      });
+    });
+    expect(hook.result.current.loading).toBe(false);
+
+    act(() => {
+      jest.runAllTimers();
+    });
+    await waitFor(() => expect(hook.result.current.loading).toBe(false));
+
+    act(() => {
+      hook = setUp(request, {
+        loadingDelay: 500,
+      });
+    });
+    expect(hook.result.current.loading).toBe(false);
+
+    act(() => {
+      jest.advanceTimersByTime(501);
+    });
+    expect(hook.result.current.loading).toBe(true);
+
+    act(() => {
+      jest.runAllTimers();
+    });
+    await waitFor(() => expect(hook.result.current.loading).toBe(false));
+    expect(hook.result.current.loading).toBe(false);
+  });
+
+  it('useLoadingDelayPlugin should no update loading when ready is false', async () => {
+    act(() => {
+      hook = setUp(request, {
+        loadingDelay: 2000,
+        ready: false,
+      });
+    });
+    expect(hook.result.current.loading).toEqual(false);
+
+    act(() => {
+      jest.advanceTimersByTime(3000);
+    });
+
+    expect(hook.result.current.loading).toEqual(false);
+  });
+
+  it('useLoadingDelayPlugin should update loading when ready is undefined', async () => {
+    act(() => {
+      hook = setUp(request, {
+        loadingDelay: 2000,
+      });
+    });
+    expect(hook.result.current.loading).toEqual(false);
+
+    act(() => {
+      jest.advanceTimersByTime(3000);
+    });
+
+    expect(hook.result.current.loading).toEqual(true);
+    hook.unmount();
+  });
+});

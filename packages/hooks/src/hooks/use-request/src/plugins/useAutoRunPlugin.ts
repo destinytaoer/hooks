@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Plugin } from '../typings';
+import type { Plugin } from '../typings';
 import { useUpdate } from '../../../use-update';
 
 // 支持 refreshDeps & ready options

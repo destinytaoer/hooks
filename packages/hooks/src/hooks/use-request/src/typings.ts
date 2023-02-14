@@ -34,6 +34,8 @@ export interface Options<TData, TParams extends any[]> {
   throttleWait?: number;
   throttleLeading?: boolean;
   throttleTrailing?: boolean;
+
+  loadingDelay?: number;
 }
 
 export type Subscribe = () => void;
@@ -80,3 +82,5 @@ export interface PluginReturn<TData, TParams extends any[]> {
   onCancel?: () => void;
   onMutate?: (data: TData) => void;
 }
+
+export type Timeout = ReturnType<typeof setTimeout>;

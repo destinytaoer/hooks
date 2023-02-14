@@ -9,6 +9,7 @@ import { Service, Options, Result, Plugin } from './typings';
 import useAutoRunPlugin from './plugins/useAutoRunPlugin';
 import useDebouncePlugin from './plugins/useDebouncePlugin';
 import useThrottlePlugin from './plugins/useThrottlePlugin';
+import { useLoadingDelayPlugin } from './plugins/useLoadingDelayPlugin';
 
 export const useRequest = <TData, TParams extends any[]>(
   service: Service<TData, TParams>,
@@ -18,10 +19,13 @@ export const useRequest = <TData, TParams extends any[]>(
   const { manual = false, ...rest } = options;
   const fetchOptions = { manual, ...rest };
 
-  plugins = [...plugins, useAutoRunPlugin, useDebouncePlugin, useThrottlePlugin] as Plugin<
-    TData,
-    TParams
-  >[];
+  plugins = [
+    ...plugins,
+    useAutoRunPlugin,
+    useDebouncePlugin,
+    useThrottlePlugin,
+    useLoadingDelayPlugin,
+  ] as Plugin<TData, TParams>[];
 
   const serviceRef = useLatestRef(service);
 

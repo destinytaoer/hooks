@@ -36,6 +36,9 @@ export interface Options<TData, TParams extends any[]> {
   throttleTrailing?: boolean;
 
   loadingDelay?: number;
+
+  // polling
+  pollingInterval?: number;
 }
 
 export type Subscribe = () => void;

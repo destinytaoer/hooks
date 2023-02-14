@@ -10,6 +10,7 @@ import useAutoRunPlugin from './plugins/useAutoRunPlugin';
 import useDebouncePlugin from './plugins/useDebouncePlugin';
 import useThrottlePlugin from './plugins/useThrottlePlugin';
 import { useLoadingDelayPlugin } from './plugins/useLoadingDelayPlugin';
+import { usePolingPlugin } from './plugins/usePolingPlugin';
 
 export const useRequest = <TData, TParams extends any[]>(
   service: Service<TData, TParams>,
@@ -25,6 +26,7 @@ export const useRequest = <TData, TParams extends any[]>(
     useDebouncePlugin,
     useThrottlePlugin,
     useLoadingDelayPlugin,
+    usePolingPlugin,
   ] as Plugin<TData, TParams>[];
 
   const serviceRef = useLatestRef(service);
